@@ -63,6 +63,7 @@ import com.segment.analytics.Analytics;
 import com.segment.analytics.Callback;
 import com.segment.analytics.messages.Message;
 import com.segment.analytics.messages.TrackMessage;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import org.eclipse.che.api.core.rest.HttpJsonRequestFactory;
 import org.slf4j.Logger;
@@ -86,8 +87,8 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
 
   @VisibleForTesting long noActivityTimeout = 60000 * 3;
 
-  private String segmentWriteKey;
-  private String woopraDomain;
+  String segmentWriteKey;
+  String woopraDomain;
 
   private ScheduledExecutorService checkActivityExecutor =
       Executors.newSingleThreadScheduledExecutor(
@@ -104,18 +105,26 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
   @VisibleForTesting HttpUrlConnectionProvider httpUrlConnectionProvider = null;
 
   public AnalyticsManager(
+      String defaultSegmentWriteKey,
+      String defaultWoopraDomain,
       String apiEndpoint,
       String workspaceId,
       HttpJsonRequestFactory requestFactory,
       AnalyticsProvider analyticsProvider,
       HttpUrlConnectionProvider httpUrlConnectionProvider) {
     super(apiEndpoint, workspaceId, requestFactory);
+    segmentWriteKey = defaultSegmentWriteKey;
+    woopraDomain = defaultWoopraDomain;
     try {
-      String endpoint = apiEndpoint + "/fabric8-che-analytics/segment-write-key";
-      segmentWriteKey = requestFactory.fromUrl(endpoint).request().asString();
+      if (segmentWriteKey == null) {
+        String endpoint = apiEndpoint + "/fabric8-che-analytics/segment-write-key";
+        segmentWriteKey = requestFactory.fromUrl(endpoint).request().asString();
+      }
 
-      endpoint = apiEndpoint + "/fabric8-che-analytics/woopra-domain";
-      woopraDomain = requestFactory.fromUrl(endpoint).request().asString();
+      if (woopraDomain == null) {
+        String endpoint = apiEndpoint + "/fabric8-che-analytics/woopra-domain";
+        woopraDomain = requestFactory.fromUrl(endpoint).request().asString();
+      }
     } catch (Exception e) {
       throw new RuntimeException("Can't get Che analytics settings from wsmaster", e);
     }
