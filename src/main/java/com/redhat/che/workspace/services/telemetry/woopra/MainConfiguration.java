@@ -18,6 +18,6 @@ public class MainConfiguration extends BaseConfiguration {
 
     @Produces
     public AbstractAnalyticsManager analyticsManager() {
-      return new AnalyticsManager(segmentWriteKey.orElse(null), woopraDomain.orElse(null), apiEndpoint, workspaceId, requestFactory(), new AnalyticsProvider(), new HttpUrlConnectionProvider());
+      return new AnalyticsManager(segmentWriteKey.orElse(null), woopraDomain.orElse(null), apiEndpoint, workspaceId, machineToken, requestFactory(), new AnalyticsProvider(), new HttpUrlConnectionProvider());
     }
 }

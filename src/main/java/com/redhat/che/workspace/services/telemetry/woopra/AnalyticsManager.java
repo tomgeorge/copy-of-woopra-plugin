@@ -109,10 +109,11 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
       String defaultWoopraDomain,
       String apiEndpoint,
       String workspaceId,
+      String machineToken,
       HttpJsonRequestFactory requestFactory,
       AnalyticsProvider analyticsProvider,
       HttpUrlConnectionProvider httpUrlConnectionProvider) {
-    super(apiEndpoint, workspaceId, requestFactory);
+    super(apiEndpoint, workspaceId, machineToken, requestFactory);
     segmentWriteKey = defaultSegmentWriteKey;
     woopraDomain = defaultWoopraDomain;
     try {
@@ -192,7 +193,8 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
                         WORKSPACE_INACTIVE,
                         Collections.emptyMap(),
                         dispatcher.getLastIp(),
-                        dispatcher.getLastUserAgent())
+                        dispatcher.getLastUserAgent(),
+                        dispatcher.getLastResolution())
                     != null) {
                   LOG.debug("Sent 'WORKSPACE_INACTIVE' event for user: {}", dispatcher.getUserId());
                   return;
@@ -217,13 +219,14 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
                       WORKSPACE_USED,
                       Collections.emptyMap(),
                       dispatcher.getLastIp(),
-                      dispatcher.getLastUserAgent());
+                      dispatcher.getLastUserAgent(),
+                      dispatcher.getLastResolution());
                 }
               }
             });
   }
 
-  public void onActivity(String userId) {
+  public void onActivity() {
     try {
       dispatchers.get(userId).onActivity();
     } catch (ExecutionException e) {
@@ -232,16 +235,17 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
   }
 
   public void onEvent(
-      String userId,
-      AnalyticsEvent event,
-      Map<String, Object> properties,
-      String ip,
-      String userAgent) {
-    if (event == WORKSPACE_STARTED) {
+    AnalyticsEvent event,
+    String ownerId,
+    String ip,
+    String userAgent,
+    String resolution,
+    Map<String, Object> properties) {
+  if (event == WORKSPACE_STARTED) {
       workspaceStartingUserId = userId;
     }
     try {
-      dispatchers.get(userId).sendTrackEvent(event, properties, ip, userAgent);
+      dispatchers.get(userId).sendTrackEvent(event, properties, ip, userAgent, resolution);
     } catch (ExecutionException e) {
       LOG.warn("", e);
     }
@@ -260,6 +264,7 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
     private long lastEventTime;
     private String lastIp = null;
     private String lastUserAgent = null;
+    private String lastResolution = null;
     private ScheduledFuture<?> pinger = null;
 
     private Map<String, Object> commonProperties;
@@ -359,7 +364,7 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
       }
 
       if (failed && lastEvent != null) {
-        sendTrackEvent(lastEvent, lastEventProperties, getLastIp(), getLastUserAgent(), true);
+        sendTrackEvent(lastEvent, lastEventProperties, getLastIp(), getLastUserAgent(), getLastResolution(), true);
       }
     }
 
@@ -388,8 +393,8 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
     }
 
     String sendTrackEvent(
-        AnalyticsEvent event, final Map<String, Object> properties, String ip, String userAgent) {
-      return sendTrackEvent(event, properties, ip, userAgent, false);
+        AnalyticsEvent event, final Map<String, Object> properties, String ip, String userAgent, String resolution) {
+      return sendTrackEvent(event, properties, ip, userAgent, resolution, false);
     }
 
     String sendTrackEvent(
@@ -397,10 +402,12 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
         final Map<String, Object> properties,
         String ip,
         String userAgent,
+        String resolution,
         boolean force) {
       String eventId;
       lastIp = ip;
       lastUserAgent = userAgent;
+      lastResolution = resolution;
       final String theIp = ip != null ? ip : "0.0.0.0";
       synchronized (this) {
         lastEventTime = System.currentTimeMillis();
@@ -473,6 +480,10 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
       return lastUserAgent;
     }
 
+    String getLastResolution() {
+      return lastResolution;
+    }
+
     String getUserId() {
       return userId;
     }
@@ -502,7 +513,8 @@ public class AnalyticsManager extends AbstractAnalyticsManager {
             WORKSPACE_STOPPED,
             Collections.emptyMap(),
             dispatcher.getLastIp(),
-            dispatcher.getLastUserAgent());
+            dispatcher.getLastUserAgent(),
+            dispatcher.getLastResolution());
       } catch (ExecutionException e) {
       }
     }
