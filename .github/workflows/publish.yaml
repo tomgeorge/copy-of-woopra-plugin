@@ -3,7 +3,7 @@ name: Publish Maven and NPM Artifacts
 on: 
   push:
     branches:
-      tomgeorge/github-actions
+      master
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
