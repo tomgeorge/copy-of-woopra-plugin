@@ -3,7 +3,7 @@ name: Publish Maven and NPM Artifacts
 on: 
   push:
     branches:
-      master
+      tomgeorge/build-docker-image
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
@@ -29,6 +29,25 @@ jobs:
       run: |
         mkdir -p ~/.m2
         mvn --settings settings.xml clean install -Dmaven.wagon.http.pool=false
+      env:
+        GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USERNAME: x-access-token
+    - name: Maven install
+      run: mvn --settings settings.xml clean package -Pnative
+      env:
+        GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USERNAME: x-access-token
+    - name: Build docker image
+      run: |
+        TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        docker build -t quay.io/eclipse/che-workspace-telemetry-woopra-backend:${TAG} -f src/main/docker/Dockerfile.native .
+      env:
+        GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_USERNAME: x-access-token
+    - name: Push docker image
+      run: |
+        TAG=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+        docker push quay.io/eclipse/che-workspace-telemetry-woopra-backend:${VERSION}
       env:
         GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_USERNAME: x-access-token
