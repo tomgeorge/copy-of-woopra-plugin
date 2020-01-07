@@ -38,6 +38,8 @@ jobs:
         tar -xf graalvm-ce-java11-linux-amd64-19.3.0.2.tar.gz
         export GRAALVM_HOME="$(pwd)/graalvm-ce-java11-linux-amd64-19.3.0.2"
         export PATH=$GRAALVM_HOME/bin:$PATH
+        ls -l
+        env
         gu install native-image
         mvn --settings settings.xml clean package -Pnative
       env:
