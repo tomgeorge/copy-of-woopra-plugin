@@ -19,12 +19,22 @@ projects:
   - name: che-workspace-telemetry-woopra-backend
     source:
       location: >-
-        https://github.com/davidfestal/che-workspace-telemetry-woopra-backend.git
+        https://github.com/redhat-developer/che-workspace-telemetry-woopra-backend.git
       type: git
       branch: master
 attributes:
   persistVolumes: 'true'
 components:
+  - memoryLimit: 256Mi
+    type: dockerimage
+    image: 'quay.io/tgeorge/che-workspace-telemetry-woopra-backend:dev'
+    env:
+      - value: $(CHE_API_INTERNAL)
+        name: CHE_API
+      - value: KmuLH5xpBtZEfzxLz4bDKgsYFwTsrpcr
+        name: CHE_FABRIC8_ANALYTICS_SEGMENT_WRITE_KEY
+      - value: test.openshift.io
+        name: CHE_FABRIC8_ANALYTICS_WOOPRA_DOMAIN
   - mountSources: true
     memoryLimit: 4800Mi
     type: dockerimage

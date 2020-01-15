@@ -9,5 +9,5 @@ WORKDIR /work/
 COPY target/*-runner /work/application
 COPY --from=nativebuilder /tmp/ssl-libs/ /work/
 RUN chmod 775 /work
-EXPOSE 8080
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Djava.library.path=/work/lib", "-Djavax.net.ssl.trustStore=/work/cacerts"]
+EXPOSE 4167
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.http.port=${CHE_WORKSPACE_TELEMETRY_BACKEND_PORT}", "-Djava.library.path=/work/lib", "-Djavax.net.ssl.trustStore=/work/cacerts"]

@@ -222,8 +222,8 @@
                 </goals>
                 <configuration>
                   <additionalBuildArgs>
-                    <additionalBuildArg>-H:DynamicProxyConfigurationResources=dynamic-proxies.json
-                    </additionalBuildArg>
+                    <additionalBuildArg>-H:DynamicProxyConfigurationResources=dynamic-proxies.json</additionalBuildArg>
+                    <additionalBuildArg>--enable-all-security-services</additionalBuildArg>
                   </additionalBuildArgs>
                 </configuration>
               </execution>
