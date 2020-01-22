@@ -1,0 +1,23 @@
+apiVersion: v2
+publisher: redhat-developer
+name: che-workspace-telemetry-woopra-backend
+version: 0.0.1
+type: Che Plugin
+displayName: Woopra Telemetry Backend
+title: Che Workspace Telemetry Woopra Backend
+category: Other
+spec:
+  workspaceEnv:
+    - name: CHE_WORKSPACE_TELEMETRY_BACKEND_PORT
+      value: '4167'
+  containers:
+  - name: che-workspace-telemetry-woopra-backend
+    image: quay.io/tgeorge/che-workspace-telemetry-woopra-backend:dev
+    env:
+      - name: CHE_API
+        value: $(CHE_API_INTERNAL)
+      - name: CHE_FABRIC8_ANALYTICS_WOOPRA_DOMAIN
+        value: ''
+      - name: CHE_FABRIC8_ANALYTICS_SEGMENT_WRITE_KEY
+        value: ''
+
