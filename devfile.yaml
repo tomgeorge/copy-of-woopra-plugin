@@ -19,7 +19,7 @@ projects:
   - name: che-workspace-telemetry-woopra-backend
     source:
       location: >-
-        https://github.com/davidfestal/che-workspace-telemetry-woopra-backend.git
+        https://github.com/redhat-developer/che-workspace-telemetry-woopra-backend.git
       type: git
       branch: master
 attributes:
