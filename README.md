@@ -52,6 +52,16 @@ Add a repository entry in `$HOME/.m2/settings.xml`
 
 `mvn package -Pnative`
 
+## Building the Docker Image
+
+### If you have previously built the native binary with `mvn package -Pnative`:
+
+`docker build -f src/main/docker/Dockerfile.native -t image-name:tag .`
+
+### To use the multistage Dockerfile to build the GraalVM native image and docker image
+
+`docker build -f src/main/docker/Dockerfile.multi -t image-name:tag .`
+
 ## Running Tests
 
 `mvn verify`
