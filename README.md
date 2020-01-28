@@ -60,7 +60,14 @@ Add a repository entry in `$HOME/.m2/settings.xml`
 
 ### To use the multistage Dockerfile to build the GraalVM native image and docker image
 
-`docker build -f src/main/docker/Dockerfile.multi -t image-name:tag .`
+The `Dockerfile` needs two build arguments:
+
++ `GITHUB_USERNAME` - the GitHub username you intend to use to build the native image.  This user should have an access token with `read:packages` permissions associated with it.
++ `GITHUB_PASSWORD` - a GitHub Personal Access Token with `read:packages` permissions to pull down the necessary Maven dependencies.
+
+Then pass in the build arguments:
+
+`docker build --build-arg GITHUB_USERNAME=<github username> --build-arg GITHUB_PASSWORD=<personal access token> -f src/main/docker/Dockerfile.multi -t image-name:tag .`
 
 ## Running Tests
 
