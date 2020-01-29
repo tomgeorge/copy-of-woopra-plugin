@@ -47,18 +47,6 @@ function install_deps() {
   echo 'CICO: Dependencies installed'
 }
 
-function set_release_tag() {
-  # Let's obtain the tag based on the
-  # version defined in the 'VERSION' file
-  TAG=$(head -n 1 VERSION)
-  export TAG
-}
-
-function set_nightly_tag() {
-  # Let's set the tag as nightly
-  export TAG="nightly"
-}
-
 function tag_push() {
   local TARGET=$1
   docker tag "${IMAGE}" "$TARGET"
@@ -88,7 +76,7 @@ function setup_environment() {
 # Build, tag, and push devfile registry, tagged with ${TAG} and ${GIT_COMMIT_TAG}
 function build_and_push() {
   # Let's build and push image to 'quay.io' using git commit hash as tag first
-  docker build --build-arg GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg GITHUB_PASSWORD=${GITHUB_PASSWORD} -t ${IMAGE} -f ${DOCKERFILE_PATH} --target che-workspace-telemetry-woopra-backend .
+  docker build --build-arg GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg GITHUB_PASSWORD=${GITHUB_PASSWORD} -t ${IMAGE} -f ${DOCKERFILE_PATH} .
   tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:${GIT_COMMIT_TAG}"
   echo "CICO: '${GIT_COMMIT_TAG}' version of images pushed to '${REGISTRY}/${ORGANIZATION}' organization"
 
