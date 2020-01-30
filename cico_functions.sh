@@ -27,6 +27,8 @@ function load_jenkins_vars() {
             JENKINS_URL \
             GIT_BRANCH \
             GIT_COMMIT \
+            GITHUB_USERNAME \
+            GITHUB_PASSWORD \
             BUILD_NUMBER \
             ghprbSourceBranch \
             ghprbActualCommit \
