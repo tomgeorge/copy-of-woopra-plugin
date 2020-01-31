@@ -9,7 +9,7 @@ dependencies from GitHub.
 To compile a native image, you also need [GraalVM 19.2.1](https://www.graalvm.org/) and `native-image`
 installed.
 
-Add a repository entry in `$HOME/.m2/settings.xml`
+Add a repository entry in `$HOME/.m2/settings.xml`:
 
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
