@@ -7,7 +7,7 @@ USER root
 RUN chown -R quarkus /usr/src/app
 USER quarkus
 ARG GITHUB_USERNAME 
-ARG GITHUB_PASSWORD
+ARG GITHUB_TOKEN
 RUN mvn --settings /usr/src/app/settings.xml -f /usr/src/app/pom.xml -Pnative clean package
 
 ## Stage 2 : create the docker final image

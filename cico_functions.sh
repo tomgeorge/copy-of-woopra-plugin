@@ -28,7 +28,7 @@ function load_jenkins_vars() {
             GIT_BRANCH \
             GIT_COMMIT \
             GITHUB_USERNAME \
-            GITHUB_PASSWORD \
+            GITHUB_TOKEN \
             BUILD_NUMBER \
             ghprbSourceBranch \
             ghprbActualCommit \
@@ -78,7 +78,7 @@ function setup_environment() {
 # Build, tag, and push devfile registry, tagged with ${TAG} and ${GIT_COMMIT_TAG}
 function build_and_push() {
   # Let's build and push image to 'quay.io' using git commit hash as tag first
-  docker build --build-arg GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg GITHUB_PASSWORD=${GITHUB_PASSWORD} -t ${IMAGE} -f ${DOCKERFILE_PATH} .
+  docker build --build-arg GITHUB_USERNAME=${GITHUB_USERNAME} --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} -t ${IMAGE} -f ${DOCKERFILE_PATH} .
   tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:${GIT_COMMIT_TAG}"
   echo "CICO: '${GIT_COMMIT_TAG}' version of images pushed to '${REGISTRY}/${ORGANIZATION}' organization"
 
