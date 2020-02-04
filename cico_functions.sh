@@ -78,6 +78,9 @@ function build_and_push() {
   tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:${GIT_COMMIT_TAG}"
   echo "CICO: '${GIT_COMMIT_TAG}' version of images pushed to '${REGISTRY}/${ORGANIZATION}' organization"
 
+  tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:latest"
+  echo "CICO: pushed to ${REGISTRY}/${ORGANIZATION}:latest"
+
   # If additional tag is set (e.g. "nightly"), let's tag the image accordingly and also push to 'quay.io'
   if [ -n "${TAG}" ]; then
     tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:${TAG}"
