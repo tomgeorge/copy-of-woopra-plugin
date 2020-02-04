@@ -22,8 +22,6 @@ function load_jenkins_vars() {
             DEVSHIFT_TAG_LEN \
             QUAY_USERNAME \
             QUAY_PASSWORD \
-            QUAY_ECLIPSE_CHE_USERNAME \
-            QUAY_ECLIPSE_CHE_PASSWORD \
             JENKINS_URL \
             GIT_BRANCH \
             GIT_COMMIT \
@@ -65,8 +63,6 @@ function setup_environment() {
   export DOCKERFILE_PATH="./src/main/docker/Dockerfile.multi"
   export ORGANIZATION="openshiftio"
   export IMAGE="che-workspace-telemetry-woopra-backend"
-  export QUAY_USERNAME=${QUAY_ECLIPSE_CHE_USERNAME}
-  export QUAY_PASSWORD=${QUAY_ECLIPSE_CHE_PASSWORD}
 
   if [ -n "${QUAY_USERNAME}" ] && [ -n "${QUAY_PASSWORD}" ]; then
     docker login -u "${QUAY_USERNAME}" -p "${QUAY_PASSWORD}" "${REGISTRY}"
