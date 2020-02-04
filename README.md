@@ -1,3 +1,5 @@
+[![Master Build Status](https://ci.centos.org/buildStatus/icon?subject=master&job=devtools-che-workspace-telemetry-woopra-backend-build-master/)](https://ci.centos.org/view/Devtools/job/devtools-che-workspace-telemetry-woopra-backend-build-master/)
+
 # che-workspace-telemetry-woopra-backend
 
 ## Prerequisites
