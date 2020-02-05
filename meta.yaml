@@ -4,6 +4,7 @@ name: che-workspace-telemetry-woopra-backend
 version: 0.0.1
 type: Che Plugin
 displayName: Woopra Telemetry Backend
+description: Telemetry plugin to send information to Woopra
 title: Che Workspace Telemetry Woopra Backend
 category: Other
 spec:
@@ -12,7 +13,7 @@ spec:
       value: '4167'
   containers:
   - name: che-workspace-telemetry-woopra-backend
-    image: quay.io/tgeorge/che-workspace-telemetry-woopra-backend:dev
+    image: quay.io/openshiftio/che-workspace-telemetry-woopra-backend:latest
     env:
       - name: CHE_API
         value: $(CHE_API_INTERNAL)
