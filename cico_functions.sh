@@ -47,6 +47,11 @@ function install_deps() {
   echo 'CICO: Dependencies installed'
 }
 
+function set_nightly_tag() {
+  # Let's set the tag as nightly
+  export TAG="nightly"
+}
+
 function tag_push() {
   local TARGET=$1
   docker tag "${IMAGE}" "$TARGET"
