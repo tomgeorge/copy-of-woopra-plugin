@@ -75,3 +75,29 @@ Then pass in the build arguments:
 ## Running Tests
 
 `mvn verify`
+
+
+## Publishing a new version of the plugin `meta.yaml` file
+
+The plugin `meta.yaml` is hosted on a CDN at [static.developers.redhat.com](https://static.developers.redhat.com).  In order to push a new version, you will need the appropriate Akamai credential file, with the following layout:
+
+```
+[default]
+key = key = <Secret key for the Akamai NetStorage account>
+id = <NetStorage account ID>
+group = <NetStorage storage group>
+host = <NetStorage host>
+cpcode = <NetStorage CPCode>
+```
+
+Save this file as `akamai-auth.conf`.
+
+In the root of this repository, run:
+
+```shell
+docker run -w /root/app -v $(pwd):/root/app -v \
+  /path/to/akamai-auth.conf:/root/.akamai-cli/.netstorage/auth \
+  akamai/cli netstorage upload \
+  --directory rh-che/plugins/che-workspace-telemetry-woopra-backend/0.0.1 \
+  meta.yaml
+```
