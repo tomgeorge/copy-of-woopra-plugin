@@ -52,6 +52,11 @@ function set_nightly_tag() {
   export TAG="nightly"
 }
 
+function set_latest_tag() {
+  # Let's set the tag as latest
+  export TAG="latest"
+}
+
 function tag_push() {
   local TARGET=$1
   docker tag "${IMAGE}" "$TARGET"
@@ -82,9 +87,6 @@ function build_and_push() {
   docker build --build-arg GITHUB_USERNAME=${GITHUB_READ_PACKAGES_USERNAME} --build-arg GITHUB_TOKEN=${GITHUB_READ_PACKAGES_TOKEN} -t ${IMAGE} -f ${DOCKERFILE_PATH} .
   tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:${GIT_COMMIT_TAG}"
   echo "CICO: '${GIT_COMMIT_TAG}' version of images pushed to '${REGISTRY}/${ORGANIZATION}' organization"
-
-  tag_push "${REGISTRY}/${ORGANIZATION}/${IMAGE}:latest"
-  echo "CICO: pushed to ${REGISTRY}/${ORGANIZATION}:latest"
 
   # If additional tag is set (e.g. "nightly"), let's tag the image accordingly and also push to 'quay.io'
   if [ -n "${TAG}" ]; then

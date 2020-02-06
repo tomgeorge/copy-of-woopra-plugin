@@ -23,4 +23,5 @@ export SCRIPT_DIR
 load_jenkins_vars
 install_deps
 setup_environment
+set_latest_tag
 build_and_push
